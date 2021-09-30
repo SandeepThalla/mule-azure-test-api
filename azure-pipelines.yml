@@ -1,0 +1,34 @@
+# The variable package.version needs to be set accordingly and should correspond to the application version
+variables:
+  - name: package.version
+    value: 1.0.0
+
+############################################################################
+############################################################################
+#### The remaining lines of this file are not expected to be changed.
+name: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+resources:
+  repositories:
+    - repository: azure-pipelines
+      type: git
+      name: mulesoft-azure-pipelines
+
+# The triggers do not need to be changed. 
+# They should stay like this independent of whether the yaml file is located in the develop or the master branch.
+trigger: 
+  batch: true
+  branches:
+    include:
+    - main
+    - develop
+    - release/*
+  paths:
+    exclude:
+    - azure-pipelines.yml
+    - pom.xml
+
+stages:
+  - template: core-azure-pipeline.yml@azure-pipelines
+    parameters:
+      packageVersion : $(package.version)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b4c7d26f-0ff2-40f8-94d1-4c9344458878" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="hello-worldFlow" doc:id="655332c1-5e56-4427-89dc-dbfacb0251c7" >
+		<http:listener doc:name="Listener" doc:id="0b3cd1e0-c573-4b87-8ba6-eab57c6ae420" config-ref="HTTP_Listener_config" path="/hello"/>
+		<logger level="INFO" doc:name="Logger" doc:id="59b9eab2-5e00-4b1f-a3ef-ef0ff6c54b23" message='#["Request Received"]'/>
+		<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  "message": "Hello World"&#10;}]' doc:name="Set Payload" doc:id="f788539a-557a-4f15-a45a-a444f7064fee" />
+		<logger level="INFO" doc:name="Logger" doc:id="ef7235fc-09fd-4f46-a1ee-01b6ff02f67a" message='#["Response Sent"]'/>
+	</flow>
+	</mule>

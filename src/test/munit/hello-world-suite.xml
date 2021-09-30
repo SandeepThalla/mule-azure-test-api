@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="hello-world-suite.xml" />
+	<munit:test name="hello-worldFlow-test" doc:id="07eac52c-da47-4d38-9df0-6eb8f7fe9ffb" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="ff91f7ea-af51-4c07-b32c-8e7ebd4a7690" >
+				<munit:payload value="#[readUrl('classpath://helloworldFlowtest/set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://helloworldFlowtest/set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to hello-worldFlow" doc:id="b7eaeb77-33da-4608-a56a-bd148d3c275f" name="hello-worldFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="0709b91f-e74f-41eb-a834-382415d370a9" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import helloworldFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+</mule>
